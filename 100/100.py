@@ -5,6 +5,8 @@
 
 # ********************************* FUNCTIONS ***********************************
 # ===============================================================================
+print('Type two numbers in the form "1 2" for the numbers 1 and 2')
+
 
 def user_input():
 
@@ -13,20 +15,29 @@ def user_input():
         Takes the user input with the example format '1 2' for
         # the numbers 1 and 2 (input must be on the same line)
         """
-        string_in = input().split()
-
-        number_list.append(int(string_in[0]))
-        number_list.append(int(string_in[1]))
-
-        string_list.append([int(string_in[0]), int(string_in[1])])
+        string_in = input()
+        string_in = string_in.split()
+        if (
+            int(string_in[0]) >= 1
+            and int(string_in[1]) >= 1
+            and int(string_in[0]) <= 1000000
+            and int(string_in[1]) <= 1000000):
+                string_list.append([int(string_in[0]), int(string_in[1])])
+        else:
+            print('Not a valid sequence.  Must be between 1 - 1,000,000')
+            exit()
 
     except ValueError:
-        # Verify that input for both items are integers
+        """
+        Verify that input for both items are integers,
+        if not then end program
+        """
         print('ValueError:  Must be integers!')
         exit()
     except IndexError:
-        print('IndexError:  Must have a value!')
-        exit()
+        return False    # If user types the Enter key, end loop
+
+    return True     # Continues Loop
 
 
 def num_seq(num):
@@ -54,6 +65,18 @@ def num_seq(num):
         print('Invalid Sequence:  Must be between 0 and 1,000,000')
         exit()
 
+
+def num_range(num1, num2):
+    """
+    With the input of any two numbers,
+    Reorder the numbers so we can extract a range
+    between the two.  Output the range as a list.
+    """
+    templist = sorted([num1, num2])
+    reval_numlist = list(range(templist[0], templist[1]+1))
+    return reval_numlist
+
+
 # ***************************** VALUES AND CALC *********************************
 # ===============================================================================
 
@@ -63,26 +86,11 @@ string_list = []
 number_list = []
 largest = []
 
-# Request a list to be generated
-user_input()
+while user_input():
+    pass
 
-number_list = sorted(number_list)
-
-# Create new list from numbers
-reval_numlist = list(range(number_list[0], number_list[1]+1))
-# print(reval_numlist)
-
-
-
-for i in reval_numlist:
-    num_seq(i)
-
-# print(string_list)
-print('%d %d %d' % (number_list[0], number_list[1], sorted(largest).pop()))
-
-
-
-
-
-
-
+for ii in string_list:
+    for i in num_range(ii[0], ii[1]):
+        num_seq(i)
+    print(ii[0], ii[1], sorted(largest).pop())
+    largest = []
