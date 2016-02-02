@@ -2,14 +2,16 @@
 # The 3n + 1 problem
 # https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=29&page=show_problem&problem=36
 
+
 string_list = []
 number_list = []
 largest = []
-
+num_cache = {}
 
 
 # ********************************* FUNCTIONS ***********************************
 # ===============================================================================
+
 
 def user_input():
 
@@ -45,17 +47,20 @@ def user_input():
 
 def num_seq(num):
     """
-    While the number between 0 and
+    While the num between 0 and
     1,000,000 does not equal 1,
     recalculate number until it equals 1.
     Print the number of times the number changed
     """
-    if (num > 0) and (num < 1000000):
+    if num in num_cache.keys():
+        return num_cache[num]
+
+    elif (num >= 1) and (num <= 1000000):
 
         num_list = [num]
 
         while num != 1:
-
+            num_cache[num] = len(num_list)
             if (num % 2) != 0:
                 num = 3 * num + 1
                 num_list.append(num)
@@ -63,8 +68,10 @@ def num_seq(num):
                 num = int(num/2)
                 num_list.append(num)
 
-        largest.append(len(num_list))
-        return len(num_list)
+        result = len(num_list)
+        largest.append(result)
+
+        return result
     else:
         print('Invalid Sequence:  Must be between 0 and 1,000,000')
         exit()
@@ -96,3 +103,4 @@ if __name__ == '__main__':
             num_seq(i)
         print(ii[0], ii[1], sorted(largest).pop())
         largest = []
+    print('%d values skipped.' % len(num_cache))
