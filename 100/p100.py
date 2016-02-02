@@ -5,8 +5,9 @@
 
 string_list = []
 number_list = []
-largest = []
+largest = [0]
 num_cache = {}
+
 
 
 # ********************************* FUNCTIONS ***********************************
@@ -47,7 +48,7 @@ def user_input():
 
 def num_seq(num):
     """
-    While the num between 0 and
+    While num between 0 and
     1,000,000 does not equal 1,
     recalculate number until it equals 1.
     Print the number of times the number changed
@@ -69,7 +70,8 @@ def num_seq(num):
                 num_list.append(num)
 
         result = len(num_list)
-        largest.append(result)
+        if largest[0] <= result:
+            largest[0] = result
 
         return result
     else:
@@ -88,6 +90,21 @@ def num_range(num1, num2):
     return reval_numlist
 
 
+def start(largest):
+    """
+    Start of the calculation portion of the program.  Calls 'largest' list into function
+    and iterates over a range of numbers determined by string_list.
+    string_list is determined by user_input().
+    """
+    for ii in string_list:
+        for i in num_range(ii[0], ii[1]):
+            num_seq(i)
+        print(ii[0], ii[1], largest[0])
+        largest[0] = 0
+
+    print('%d calculations saved.' % len(num_cache))
+
+
 # ***************************** VALUES AND CALC *********************************
 # ===============================================================================
 
@@ -98,9 +115,4 @@ if __name__ == '__main__':
     while user_input():
         pass
 
-    for ii in string_list:
-        for i in num_range(ii[0], ii[1]):
-            num_seq(i)
-        print(ii[0], ii[1], sorted(largest).pop())
-        largest = []
-    print('%d values skipped.' % len(num_cache))
+    start(largest)
