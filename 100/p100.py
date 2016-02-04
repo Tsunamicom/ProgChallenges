@@ -2,6 +2,8 @@
 # The 3n + 1 problem
 # https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=29&page=show_problem&problem=36
 
+import time
+
 
 string_list = []
 number_list = []
@@ -53,10 +55,8 @@ def num_seq(num):
     recalculate number until it equals 1.
     Print the number of times the number changed
     """
-    if num in num_cache.keys():
-        return num_cache[num]
 
-    elif (num >= 1) and (num <= 1000000):
+    if (num >= 1) and (num <= 1000000):
 
         num_list = [num]
 
@@ -69,11 +69,14 @@ def num_seq(num):
                 num = int(num/2)
                 num_list.append(num)
 
-        result = len(num_list)
-        if largest[0] <= result:
-            largest[0] = result
+        if largest[0] <= num_cache[num]:
+            largest[0] = num_cache[num]
 
-        return result
+            if num in num_cache.keys():
+                return num_cache[num]
+
+        return largest[0]
+
     else:
         print('Invalid Sequence:  Must be between 0 and 1,000,000')
         exit()
@@ -114,5 +117,17 @@ if __name__ == '__main__':
 
     while user_input():
         pass
+    
+    # print('Processing... Please Wait \n')
 
+    # timer = time.clock()
     start(largest)
+    # timer2 = time.clock()
+    # print('{} seconds'.format(timer2-timer))
+
+
+
+
+
+
+
