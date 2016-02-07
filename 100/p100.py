@@ -4,11 +4,9 @@
 
 import time
 
-
 string_list = []
-number_list = []
 largest = [0]
-num_cache = {}
+num_cache = dict()
 
 
 
@@ -56,30 +54,27 @@ def num_seq(num):
     Print the number of times the number changed
     """
 
-    if (num >= 1) and (num <= 1000000):
+    count = 1
+    temp = num
 
-        num_list = [num]
+    while temp != 1:
+        if (temp % 2) != 0:
+            temp = 3 * temp + 1
+        else:
+            temp = int(temp/2)
 
-        while num != 1:
-            num_cache[num] = len(num_list)
-            if (num % 2) != 0:
-                num = 3 * num + 1
-                num_list.append(num)
-            else:
-                num = int(num/2)
-                num_list.append(num)
+        # Recall memo if the new value is within num_cache
+        if temp in num_cache:
+            num_cache[num] = num_cache[temp] + count
+            return num_cache[temp] + count
+        count += 1
 
-        if largest[0] <= num_cache[num]:
-            largest[0] = num_cache[num]
+    # Store new value for process length for given number
+    num_cache[num] = count
 
-            if num in num_cache.keys():
-                return num_cache[num]
+    return count
 
-        return largest[0]
 
-    else:
-        print('Invalid Sequence:  Must be between 0 and 1,000,000')
-        exit()
 
 
 def num_range(num1, num2):
@@ -88,12 +83,12 @@ def num_range(num1, num2):
     Reorder the numbers so we can extract a range
     between the two.  Output the range as a list.
     """
-    templist = sorted([num1, num2])
-    reval_numlist = list(range(templist[0], templist[1]+1))
+    numlist = sorted([num1, num2])
+    reval_numlist = list(range(numlist[0], numlist[1]+1))
     return reval_numlist
 
 
-def start(largest):
+def start():
     """
     Start of the calculation portion of the program.  Calls 'largest' list into function
     and iterates over a range of numbers determined by string_list.
@@ -101,11 +96,14 @@ def start(largest):
     """
     for ii in string_list:
         for i in num_range(ii[0], ii[1]):
-            num_seq(i)
+            sequence = num_seq(i)
+            if largest[0] <= sequence:
+                largest[0] = sequence
         print(ii[0], ii[1], largest[0])
-        largest[0] = 0
+        largest[0] = 0  # Reset largest for multiple input strings
 
-    print('%d calculations saved.' % len(num_cache))
+
+
 
 
 # ***************************** VALUES AND CALC *********************************
@@ -117,17 +115,8 @@ if __name__ == '__main__':
 
     while user_input():
         pass
-    
-    # print('Processing... Please Wait \n')
 
-    # timer = time.clock()
-    start(largest)
-    # timer2 = time.clock()
-    # print('{} seconds'.format(timer2-timer))
-
-
-
-
-
-
-
+    t1 = time.clock()
+    start()
+    t2 = time.clock()
+    print('%s ' % (t2-t1))
