@@ -57,19 +57,22 @@ def unique_combos():
 def con_w_dist():
     """
     Given unique connection, determine distance between those connections.
-    Return a dictionary of (distance: connection)
+    Return a dictionary of {Computer 1:{Connected Computer:Distance}}
     """
 
     connection_combos = unique_combos()
     connect_master = dict()
     for connection in connection_combos:
+
+        # Calculate distances between all valid points
         con_dist = conn_length(comp_loc[connection[0]],
                                comp_loc[connection[1]])
 
-
+        # Create a dictionary of all connections and distances
         if sorted(connection)[0] not in connect_master:
             connect_master[sorted(connection)[0]] = dict()
         connect_master[sorted(connection)[0]][sorted(connection)[1]] = con_dist
+
     return connect_master
 
 
@@ -78,15 +81,4 @@ distances = con_w_dist()
 dist_list = list()
 print(distances)
 
-"""
-sort_dist = sorted(distances.keys())
-print('\n')
-print(sort_dist)
 
-for distance in sort_dist:
-    print(distances[distance])
-"""
-
-
-#  If [a1, a2], and [a1, a3], find shortest distance between the two.  return the shortest and
-#  remove connection from list.  Take into account both that have been removed.
