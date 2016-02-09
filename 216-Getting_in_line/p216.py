@@ -65,7 +65,11 @@ def con_w_dist():
     for connection in connection_combos:
         con_dist = conn_length(comp_loc[connection[0]],
                                comp_loc[connection[1]])
-        connect_master[con_dist] = sorted(connection)
+
+
+        if sorted(connection)[0] not in connect_master:
+            connect_master[sorted(connection)[0]] = dict()
+        connect_master[sorted(connection)[0]][sorted(connection)[1]] = con_dist
     return connect_master
 
 
@@ -73,13 +77,15 @@ distances = con_w_dist()
 
 dist_list = list()
 print(distances)
+
+"""
 sort_dist = sorted(distances.keys())
 print('\n')
 print(sort_dist)
 
 for distance in sort_dist:
     print(distances[distance])
-
+"""
 
 
 #  If [a1, a2], and [a1, a3], find shortest distance between the two.  return the shortest and
