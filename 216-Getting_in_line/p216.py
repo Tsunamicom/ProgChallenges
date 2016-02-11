@@ -11,16 +11,17 @@
 import math
 import time
 from itertools import combinations as comb
+import random
 
 comp_loc = dict()
-comp_loc['c1'] = (1, 4)
-comp_loc['c2'] = (2, 5)
-comp_loc['c3'] = (10, 10)
-# comp_loc['c4'] = (5, 4)
-# comp_loc['c5'] = (12, 15)
-# comp_loc['c6'] = (1, 2)
-# comp_loc['c7'] = (14, 30)
-# comp_loc['c8'] = (16, 31)
+comp_loc['c1'] = (5, 19)
+comp_loc['c2'] = (55, 28)
+comp_loc['c3'] = (38, 101)
+comp_loc['c4'] = (28, 62)
+comp_loc['c5'] = (111, 84)
+comp_loc['c6'] = (43, 116)
+#comp_loc['c7'] = (14, 30)
+#comp_loc['c8'] = (16, 31)
 
 
 def conn_length(loc1, loc2):
@@ -56,27 +57,33 @@ def con_w_dist():
         # Create a dictionary of all connections and distances
         if sorted(connection)[0] not in connect_master:
             connect_master[sorted(connection)[0]] = dict()
-        connect_master[sorted(connection)[0]][sorted(connection)[1]] = con_dist
+        connect_master[sorted(connection)[0]][con_dist] = sorted(connection)[1]
 
     return connect_master
 
-
-distances = con_w_dist()
-
-print(distances)
-
+short_path = 999999999999
 
 # Testing to find minimum and maximum distances
-maxdist = 0
-start = str
-for con in distances:
-    mindist = 999
-    for con2 in distances[con]:
-        l = distances[con][con2]
-        if l >= maxdist:
-            maxdist = l
-        if l <= mindist:
-            mindist = l
-    print(str(mindist) + ' MIN')
-print(str(maxdist) + ' MAX')
+# Needs multiple runs?
+def shortest():
+    distances = con_w_dist()
+    total_path = 0
+    path = dict()
 
+    for key in distances:
+        for conn in distances[key]:
+            if conn == min(distances[key]):
+                path[key] = distances[key][conn]
+                total_path += min(distances[key])
+
+    return total_path, path
+
+short_dist = shortest()
+
+if short_path >= short_dist[0]:
+    short_path = short_dist[0]
+
+
+print(shortest())
+
+print(short_path)
