@@ -14,12 +14,6 @@ from itertools import combinations as comb
 from itertools import permutations as perm
 
 
-
-
-networksa = [[(5, 19), (55, 28), (38, 101), (28, 62), (111, 84), (43, 116)],
-                 [(1, 1), (2, 2), (3, 3)]]
-
-
 def con_length(con_set):
     """Given a set of two coordinates, determine the distance between them"""
     return sqrt((con_set[0][0]-con_set[1][0])**2 + (con_set[0][1]-con_set[1][1])**2)
@@ -94,6 +88,10 @@ def printout(net_list):
 
 
 def input_networks():
+    """
+    Allows user input for networks.
+    Must be input in a specific format to be valid.
+    """
     print('Please enter the number of connections in the network \n'
           'followed by the coordinates for each location. \n'
           'Ex:  For 3 locations, type 3 followed by Enter, \n'
@@ -133,8 +131,8 @@ def input_networks():
             print('Enter 0 followed by Enter to exit.')
             break
 
-    networks = networkslist
-    return networks
+
+    return networkslist
 
 
 
