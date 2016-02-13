@@ -20,14 +20,14 @@ def con_length(con_set):
 
 
 def network_distances():
-    """
-    For each set of coordinates, calculate and store the distances between all coordinates.
+    """For each set of coordinates, calculate and store the distances between all coordinates.
     For variation ABC:  AB + BC:
         Find distances for AB, BC, and ABC
         Store these distances as well as the reversed (BA, CB, CBA) in master
         Also store the actual distance as a key in master
     Return the best path with the shortest distance
     Also store each set in a list for iteration
+    Requires example input for networks = [[(1, 2), (3, 4), (4, 2)],[(7, 15), (22, 15), (5, 5)]] 
     """
 
     for locations in networks:
@@ -78,7 +78,7 @@ def printout(net_list):
     network_count = 1
     for networks in net_list:
         net_dist = 0
-        print('********************************************************')
+        print('*'*60)
         print('Network %s' % network_count)
         for data in networks:
             print('Cable requirement to connect %s to %s is %.2f feet.' % (data[0], data[1], data[2]+16))
@@ -88,8 +88,7 @@ def printout(net_list):
 
 
 def input_networks():
-    """
-    Allows user input for networks.
+    """Allows user input for networks.
     Must be input in a specific format to be valid.
     """
     print('Please enter the number of connections in the network \n'
