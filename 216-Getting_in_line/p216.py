@@ -16,8 +16,8 @@ from itertools import permutations as perm
 
 
 
-networks = [[(5, 19), (55, 28), (38, 101), (28, 62), (111, 84), (43, 116)], [(1, 1), (2, 2), (3,
-                                                                                                3)]]
+networksa = [[(5, 19), (55, 28), (38, 101), (28, 62), (111, 84), (43, 116)],
+                 [(1, 1), (2, 2), (3, 3)]]
 
 
 def con_length(con_set):
@@ -77,7 +77,9 @@ def network_distances():
 
         network_list.append(best)
 
+
 def printout(net_list):
+    """Given a list of best networks, print details for each network"""
 
     network_count = 1
     for networks in net_list:
@@ -91,12 +93,57 @@ def printout(net_list):
         network_count += 1
 
 
+def input_networks():
+    print('Please enter the number of connections in the network \n'
+          'followed by the coordinates for each location. \n'
+          'Ex:  For 3 locations, type 3 followed by Enter, \n'
+          '     then coordinates x y followed by Enter')
+
+    networkslist = list()
+    computer_num = int
+    while True:
+        try:
+            computer_num = int(input())
+            if computer_num == 0:
+                break
+            elif computer_num < 2 or computer_num > 8:
+                print('Number of Computers must be between 2 and 8')
+                quit()
+            hublist = list()
+            for length in range(computer_num):
+
+                comp_loc = input()
+                comp_loc = list(comp_loc.split())
+                try:
+                    comp_loc[0] = int(comp_loc[0])
+                    comp_loc[1] = int(comp_loc[1])
+                    comp_loc = (int(comp_loc[0]), int(comp_loc[1]))
+                    if max(comp_loc) > 150 or min(comp_loc) < 0:
+                        print('Coordinates must be between 0 and 150')
+                        quit()
+                except IndexError:
+                    print('Invalid Coordinates, must be x y')
+                    quit()
+
+                hublist.append(comp_loc)
+
+            networkslist.append(hublist)
+
+        except ValueError:
+            print('Enter 0 followed by Enter to exit.')
+            break
+
+    networks = networkslist
+    return networks
+
+
 
 if __name__ == '__main__':
 
     master = dict()
     network_list = list()
 
+    networks = input_networks()
     network_distances()
     printout(network_list)
 
