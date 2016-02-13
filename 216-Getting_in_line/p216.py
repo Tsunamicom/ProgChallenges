@@ -11,79 +11,46 @@
 import math
 import time
 from itertools import combinations as comb
+from itertools import permutations as perm
 import random
 
-comp_loc = dict()
-comp_loc['c1'] = (5, 19)
-comp_loc['c2'] = (55, 28)
-comp_loc['c3'] = (38, 101)
-comp_loc['c4'] = (28, 62)
-comp_loc['c5'] = (111, 84)
-comp_loc['c6'] = (43, 116)
-#comp_loc['c7'] = (14, 30)
-#comp_loc['c8'] = (16, 31)
+locationsa = [(1, 1), (2, 2), (3, 3)]
+locations = [(5, 19), (55, 28), (38, 101), (28, 62), (111, 84), (43, 116)]
 
 
-def conn_length(loc1, loc2):
-    """Given two sets of coordinates, determine the distance between them"""
-    return math.sqrt((loc2[0]-loc1[0])**2 + (loc2[1]-loc1[1])**2)
+def con_length(con_set):
+    """Given a set of two coordinates, determine the distance between them"""
+    return math.sqrt((con_set[0][0]-con_set[1][0])**2 + (con_set[0][1]-con_set[1][1])**2)
+
+master = dict()
+best = dict()
+def combo_distances():
+    best_dist = 9999999999999
+    all_paths = perm(locations)
+    for ii in all_paths:
+        if ii in master:
+            distance = master[ii]
+        else:
+            distance = 0
+            step = 0
+            for i in comb(ii, 2):
+                if not step+1 >= len(ii):
+                    i_set = (ii[step], ii[step+1])
+                    if i_set in master:
+                        i_setdist = master[i_set]
+                    else:
+                        i_setdist = con_length(i_set)
+                        master[i_set] = i_setdist
+                        master[i_set[::-1]] = i_setdist
+                    step += 1
+                    distance += i_setdist
+            master[distance] = ii
+            master[ii] = distance
+            master[ii[::-1]] = distance
+        if best_dist >= distance:
+            best_dist = distance
+    print(best_dist, master[best_dist])
 
 
-def possible_combos():
-    """
-    Find unique cnnections given a dict of computers.
-    Return a list of unique combinations
-    """
-    combinations = comb(comp_loc.keys(), 2)
-    comblist = list()
-    for i in combinations:
-        comblist.append(list(sorted(i)))
-    return comblist
+combo_distances()
 
-
-def con_w_dist():
-    """
-    Given unique connection, determine distance between those connections.
-    Return a dictionary of {Computer: {Connected Computer: Distance}}
-    """
-    connect_master = dict()
-    connection_combos = possible_combos()
-    for connection in connection_combos:
-
-        # Calculate distances between all valid points
-        con_dist = conn_length(comp_loc[connection[0]],
-                               comp_loc[connection[1]])
-
-        # Create a dictionary of all connections and distances
-        if sorted(connection)[0] not in connect_master:
-            connect_master[sorted(connection)[0]] = dict()
-        connect_master[sorted(connection)[0]][con_dist] = sorted(connection)[1]
-
-    return connect_master
-
-short_path = 999999999999
-
-# Testing to find minimum and maximum distances
-# Needs multiple runs?
-def shortest():
-    distances = con_w_dist()
-    total_path = 0
-    path = dict()
-
-    for key in distances:
-        for conn in distances[key]:
-            if conn == min(distances[key]):
-                path[key] = distances[key][conn]
-                total_path += min(distances[key])
-
-    return total_path, path
-
-short_dist = shortest()
-
-if short_path >= short_dist[0]:
-    short_path = short_dist[0]
-
-
-print(shortest())
-
-print(short_path)
