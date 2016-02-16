@@ -21,26 +21,40 @@ def con_length(con_set):
 
 def network_distances():
     """For each set of coordinates, calculate and store the distances between all coordinates.
-    For variation ABC:  AB + BC:
-        Find distances for AB, BC, and ABC
-        Store these distances as well as the reversed (BA, CB, CBA) in master
-        Also store the actual distance as a key in master
-    Return the best path with the shortest distance
-    Also store each set in a list for iteration
-    Requires example input for networks = [[(1, 2), (3, 4), (4, 2)],[(7, 15), (22, 15), (5, 5)]] 
+
+    Requires input for networks.
+    Ex: networks = [[(1, 2), (3, 4), (4, 2)],[(7, 15), (22, 15), (5, 5)]]
+    Ex2: networks = [[A, B, C]]
+
+    variation = each element in the permutations of each network
+    Ex: (ABC, ACB, BAC, BCA, CAB, CBA)
+
+    subvar = each element in the unique combinations of each variation
+    Ex for ABC in variation: (AB, BC, AC)
+
+    subvar_set = a set of two sets of coordinates within each permutation set
+    As long as the step is not greater than the length of each permutation
+    Ex for ABC in variation: (variation[0], variation[1]) = (A, B)
+
+    subvar_setdist = calculated length between two coordinates
+    Ex for (A, B) in subvar_set:  calculate distance between A and B
+
+    Store each set in a list for iteration
+    Store each distance of the permutation set to find shortest (best_dist)
+
     """
 
     for locations in networks:
         best_dist = 999999999999
         best = list()
-        for variation in perm(locations):
+        for variation in perm(locations):    # Find all permutations of locations
             if variation in master:
                 distance = master[variation]    # Get distance from memo
             else:
                 distance = 0
                 step = 0
-                for subvar in comb(variation, 2):
-                    if not step+1 >= len(variation):
+                for subvar in comb(variation, 2):    # Check each unique comb of each perm
+                    if not step+1 >= len(variation):    # Check for end of permutation list
                         subvar_set = (variation[step], variation[step+1])
                         if subvar_set in master:
                             subvar_setdist = master[subvar_set]
@@ -52,7 +66,7 @@ def network_distances():
                         step += 1
                         distance += subvar_setdist
 
-                master[distance] = variation
+                master[distance] = variation          # Store distance for later lookup
                 master[variation] = distance          # Store for memo
                 master[variation[::-1]] = distance    # Store reverse for memo
 
